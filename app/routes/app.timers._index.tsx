@@ -2,26 +2,21 @@ import {
     Page,
     Layout,
     Card,
-    ResourceList,
     Button,
-    Text,
-    Badge,
-    BlockStack,
-    InlineStack,
-    Box,
+    InlineGrid,
+    EmptyState,
 } from "@shopify/polaris";
 import { useLoaderData, useNavigate } from "react-router";
 import { PlusIcon } from "@shopify/polaris-icons";
 import { authenticate } from "../server/shopify.server";
-
+import { TimerCard } from "../components/Dashboard/TimerCard";
 import type { LoaderFunctionArgs } from "react-router";
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+import { getTimers } from "../server/routes/admin/timers";
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
     const { session } = await authenticate.admin(request);
-    const { Timer } = await import("../server/models/Timer");
-    const timers = await Timer.find({ shop: session.shop }).sort({ createdAt: -1 });
-    // Serialize
+    const timers = await getTimers(session.shop);
     return { timers: JSON.parse(JSON.stringify(timers)) };
 };
 
@@ -29,51 +24,47 @@ export default function TimersDashboard() {
     const { timers } = useLoaderData<any>();
     const navigate = useNavigate();
 
+    const hasTimers = timers && timers.length > 0;
+
     return (
         <Page
             title="Countdown Timers"
             primaryAction={
-                <Button variant="primary" icon={PlusIcon} onClick={() => navigate("/app/timers/new")}>
+                <Button
+                    variant="primary"
+                    icon={PlusIcon}
+                    onClick={() => navigate("/app/timers/new")}
+                >
                     Create timer
                 </Button>
             }
+            fullWidth
         >
             <Layout>
                 <Layout.Section>
-                    <Card padding="0">
-                        <ResourceList
-                            resourceName={{ singular: "timer", plural: "timers" }}
-                            items={timers}
-                            renderItem={(item: any) => {
-                                const { _id, name, status, type, impressions } = item;
-                                const media = <Box padding="200" background="bg-surface-secondary" borderRadius="200"><Text as="span" variant="bodyMd">{type === 'fixed' ? '📅' : '🌲'}</Text></Box>;
-
-                                return (
-                                    <ResourceList.Item
-                                        id={_id}
-                                        url={`/app/timers/${_id}`}
-                                        media={media}
-                                        accessibilityLabel={`View details for ${name}`}
-                                        onClick={() => navigate(`/app/timers/${_id}`)}
-                                    >
-                                        <BlockStack gap="200">
-                                            <InlineStack align="space-between">
-                                                <Text variant="bodyMd" fontWeight="bold" as="h3">
-                                                    {name}
-                                                </Text>
-                                                <Badge tone={status === "active" ? "success" : status === "expired" ? "critical" : "attention"}>
-                                                    {status}
-                                                </Badge>
-                                            </InlineStack>
-                                            <Text as="p" variant="bodySm" tone="subdued">
-                                                Type: {type} • Impressions: {impressions || 0}
-                                            </Text>
-                                        </BlockStack>
-                                    </ResourceList.Item>
-                                );
-                            }}
-                        />
-                    </Card>
+                    {hasTimers ? (
+                        <InlineGrid gap="400" columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}>
+                            {timers.map((timer: any) => (
+                                <TimerCard key={timer._id} timer={timer} />
+                            ))}
+                        </InlineGrid>
+                    ) : (
+                        <Card>
+                            <EmptyState
+                                heading="Create your first countdown timer"
+                                action={{
+                                    content: "Create timer",
+                                    onAction: () => navigate("/app/timers/new"),
+                                }}
+                                image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
+                            >
+                                <p>
+                                    Drive urgency and increase conversions by adding a countdown
+                                    timer to your store.
+                                </p>
+                            </EmptyState>
+                        </Card>
+                    )}
                 </Layout.Section>
             </Layout>
         </Page>
