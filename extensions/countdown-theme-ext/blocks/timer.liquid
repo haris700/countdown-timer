@@ -1,0 +1,25 @@
+{% schema %}
+{
+  "name": "Countdown Timer",
+  "target": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Limited Time Offer"
+    }
+  ]
+}
+{% endschema %}
+
+<div 
+  class="countdown-timer-app"
+  data-product-id="{{ product.id }}" 
+  data-collection-ids="{{ product.collections | map: 'id' | join: ',' }}"
+>
+  <!-- The timer widget will be injected here if active -->
+</div>
+
+<script src="{{ 'timer.js' | asset_url }}" defer></script>
+<link rel="stylesheet" href="{{ 'timer.css' | asset_url }}">

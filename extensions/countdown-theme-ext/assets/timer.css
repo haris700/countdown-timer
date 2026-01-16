@@ -1,0 +1,69 @@
+.countdown-timer-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #fff; /* Assuming dark bg or contrasting text? User picks BG color. We need contrasting text color logic or just default white/black. I'll default white text with text-shadow for readability if light bg? Or just inherit. Let's force white/black based on brightness? JS is complex. Defaulting to white text for now as most promotional banners are dark. */
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.countdown-timer-content {
+  display: flex;
+  flex-wrap: wrap; 
+  align-items: center;
+  gap: 15px;
+  max-width: 1200px;
+  justify-content: center;
+}
+
+.countdown-description {
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+.countdown-digits {
+  font-family: 'Courier New', Courier, monospace; /* Monospace for stable numbers */
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Sizes */
+.timer-small {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+.timer-small .countdown-digits { font-size: 14px; }
+
+.timer-medium {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+.timer-medium .countdown-digits { font-size: 20px; }
+
+.timer-large {
+  padding: 20px 40px;
+  font-size: 20px;
+}
+.timer-large .countdown-digits { font-size: 32px; }
+
+/* Pulse Animation */
+@keyframes timer-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.timer-pulse .countdown-digits {
+  color: #ffcccc;
+  animation: timer-pulse 1s infinite;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .countdown-timer-content {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

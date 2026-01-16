@@ -1,0 +1,15 @@
+api_version = "2024-01"
+
+[[extensions]]
+
+uid = "2d6e9a3f-aa62-633c-0ce3-390dc16527cea09b75b2"
+
+type = "theme_app_extension"
+name = "Countdown Timer"
+handle = "countdown-timer"
+
+[extensions.targeting]
+[[extensions.targeting.module]]
+target = "section"
+[[extensions.targeting.module]]
+target = "body"

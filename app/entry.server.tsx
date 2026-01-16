@@ -5,6 +5,7 @@ import { createReadableStreamFromReadable } from "@react-router/node";
 import { type EntryContext } from "react-router";
 import { isbot } from "isbot";
 import { addDocumentResponseHeaders } from "./server/shopify.server";
+import { connectDB } from "./server/db.server";
 
 export const streamTimeout = 5000;
 
@@ -14,6 +15,7 @@ export default async function handleRequest(
   responseHeaders: Headers,
   reactRouterContext: EntryContext
 ) {
+  await connectDB();
   addDocumentResponseHeaders(request, responseHeaders);
   const userAgent = request.headers.get("user-agent");
   const callbackName = isbot(userAgent ?? '')
