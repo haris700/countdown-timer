@@ -4,14 +4,15 @@
   align-items: center;
   padding: 10px 20px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color: #fff; /* Assuming dark bg or contrasting text? User picks BG color. We need contrasting text color logic or just default white/black. I'll default white text with text-shadow for readability if light bg? Or just inherit. Let's force white/black based on brightness? JS is complex. Defaulting to white text for now as most promotional banners are dark. */
+  color: #fff;
+  /* Assuming dark bg or contrasting text? User picks BG color. We need contrasting text color logic or just default white/black. I'll default white text with text-shadow for readability if light bg? Or just inherit. Let's force white/black based on brightness? JS is complex. Defaulting to white text for now as most promotional banners are dark. */
   box-sizing: border-box;
   text-align: center;
 }
 
 .countdown-timer-content {
   display: flex;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   align-items: center;
   gap: 15px;
   max-width: 1200px;
@@ -24,7 +25,8 @@
 }
 
 .countdown-digits {
-  font-family: 'Courier New', Courier, monospace; /* Monospace for stable numbers */
+  font-family: 'Courier New', Courier, monospace;
+  /* Monospace for stable numbers */
   font-weight: 700;
   letter-spacing: 1px;
 }
@@ -34,30 +36,88 @@
   padding: 5px 10px;
   font-size: 12px;
 }
-.timer-small .countdown-digits { font-size: 14px; }
+
+.timer-small .countdown-digits {
+  font-size: 14px;
+}
 
 .timer-medium {
   padding: 10px 20px;
   font-size: 16px;
 }
-.timer-medium .countdown-digits { font-size: 20px; }
+
+.timer-medium .countdown-digits {
+  font-size: 20px;
+}
 
 .timer-large {
   padding: 20px 40px;
   font-size: 20px;
 }
-.timer-large .countdown-digits { font-size: 32px; }
+
+.timer-large .countdown-digits {
+  font-size: 32px;
+}
 
 /* Pulse Animation */
 @keyframes timer-pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .timer-pulse .countdown-digits {
   color: #ffcccc;
   animation: timer-pulse 1s infinite;
+}
+
+/* --- Card Style (Static Position) --- */
+.timer-static {
+  flex-direction: column;
+  background-color: #fff;
+  /* Default to white if not overridden */
+  color: #333;
+  border: 1px solid #e1e3e5;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin: 16px 0;
+  padding: 16px;
+  width: 100%;
+}
+
+.timer-static .countdown-timer-content {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.timer-static .countdown-description {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: #666;
+  margin: 0;
+  font-weight: 600;
+}
+
+.timer-static .countdown-digits {
+  font-size: 1.5rem;
+  /* Large digits */
+  color: #000;
+  letter-spacing: 1px;
+}
+
+/* Ensure Bar styles (Top/Bottom) keep white text */
+.timer-top,
+.timer-bottom {
+  color: #fff;
 }
 
 /* Responsive */

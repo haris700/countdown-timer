@@ -7,13 +7,21 @@ import { login } from "../../server/shopify.server";
 import { loginErrorMessage } from "./error.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const errors = loginErrorMessage(await login(request));
+  const result = await login(request);
+  if (result instanceof Response) {
+    return result;
+  }
+  const errors = loginErrorMessage(result);
 
   return { errors };
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const errors = loginErrorMessage(await login(request));
+  const result = await login(request);
+  if (result instanceof Response) {
+    return result;
+  }
+  const errors = loginErrorMessage(result);
 
   return {
     errors,
@@ -29,7 +37,7 @@ export default function Auth() {
   return (
     <AppProvider embedded={false}>
       <s-page>
-        <Form method="post">
+        <form method="post" target="_top">
           <s-section heading="Log in">
             <s-text-field
               name="shop"
@@ -42,7 +50,7 @@ export default function Auth() {
             ></s-text-field>
             <s-button type="submit">Log in</s-button>
           </s-section>
-        </Form>
+        </form>
       </s-page>
     </AppProvider>
   );

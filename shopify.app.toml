@@ -2,7 +2,7 @@
 
 client_id = "7ec8197b7ac4e524511dd6ac5597f1ec"
 name = "countdown-timer"
-application_url = "https://example.com"
+application_url = "https://contests-stroke-palestinian-shareware.trycloudflare.com"
 embedded = true
 
 [build]
@@ -25,9 +25,9 @@ api_version = "2026-04"
 scopes = "write_products"
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = [ "https://contests-stroke-palestinian-shareware.trycloudflare.com/auth/callback" ]
 
 [app_proxy]
-url = "https://example.com"
+url = "https://contests-stroke-palestinian-shareware.trycloudflare.com"
 subpath = "countdown-timer"
 prefix = "apps"

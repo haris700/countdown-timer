@@ -16,6 +16,7 @@ const shopify = shopifyApp({
   authPathPrefix: "/auth",
   sessionStorage: new SQLiteSessionStorage("shopify_sessions_v4.sqlite"),
   distribution: AppDistribution.AppStore,
+  isEmbeddedApp: true,
   future: {
     expiringOfflineAccessTokens: false,
   },

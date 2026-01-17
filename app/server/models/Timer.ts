@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const TimerSchema = new mongoose.Schema({
     shop: { type: String, required: true, index: true },
-    name: { type: String, required: true }, // Added field
+    name: { type: String, required: true },
     type: {
         type: String,
         enum: ["fixed", "evergreen"],
@@ -11,11 +11,11 @@ const TimerSchema = new mongoose.Schema({
     startAt: { type: Date },
     endAt: { type: Date },
     durationMinutes: { type: Number },
-    description: { type: String }, // Added field
-    styleConfig: { // Added UI display config
+    description: { type: String },
+    styleConfig: {
         color: { type: String, default: "#000000" },
         size: { type: String, enum: ["small", "medium", "large"], default: "medium" },
-        position: { type: String, enum: ["top", "bottom", "static"], default: "top" },
+        position: { type: String, enum: ["top", "bottom", "static"], default: "static" },
         urgency: { type: String, default: "none" }
     },
     targeting: {
