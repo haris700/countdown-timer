@@ -21,6 +21,12 @@ interface TargetingPickerProps {
   setSelectedResources: (resources: Resource[]) => void;
 }
 
+const TARGETING_OPTIONS = [
+  { label: "All Products", value: "all" },
+  { label: "Specific Products", value: "product" },
+  { label: "Specific Collections", value: "collection" },
+];
+
 export function TargetingPicker({
   targetingType,
   setTargetingType,
@@ -42,7 +48,6 @@ export function TargetingPicker({
       });
 
       if (selected) {
-        // Map to minimal objects
         setSelectedResources(
           selected.map((r: Resource) => ({
             id: r.id,
@@ -55,6 +60,13 @@ export function TargetingPicker({
     }
   }, [targetingType, selectedResources, setSelectedResources]);
 
+  const handleTargetTypeChange = useCallback(
+    (val: string) => {
+      setTargetingType(val as "all" | "product" | "collection");
+    },
+    [setTargetingType],
+  );
+
   return (
     <Card>
       <BlockStack gap="500">
@@ -64,17 +76,9 @@ export function TargetingPicker({
 
         <Select
           label="Show on"
-          options={[
-            { label: "All Products", value: "all" },
-            { label: "Specific Products", value: "product" },
-            { label: "Specific Collections", value: "collection" },
-          ]}
+          options={TARGETING_OPTIONS}
           value={targetingType}
-          onChange={(val) => {
-            setTargetingType(val as "all" | "product" | "collection");
-            // Optional: Clear selection when type changes?
-            // setSelectedResources([]);
-          }}
+          onChange={handleTargetTypeChange}
         />
 
         {targetingType !== "all" && (

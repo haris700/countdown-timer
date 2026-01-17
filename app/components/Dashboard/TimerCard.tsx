@@ -1,3 +1,4 @@
+import React from "react";
 import { Card, Text, Badge, BlockStack, InlineStack, Box, Button } from "@shopify/polaris";
 import { useNavigate } from "react-router";
 
@@ -7,7 +8,7 @@ interface TimerCardProps {
     timer: Timer;
 }
 
-export function TimerCard({ timer }: TimerCardProps) {
+export const TimerCard = React.memo(function TimerCard({ timer }: TimerCardProps) {
     const navigate = useNavigate();
     const { _id, name, status, type, startAt, endAt, impressions } = timer;
 
@@ -55,4 +56,4 @@ export function TimerCard({ timer }: TimerCardProps) {
             </BlockStack>
         </Card>
     );
-}
+});

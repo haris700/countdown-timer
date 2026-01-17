@@ -1,20 +1,17 @@
 import { authenticate } from "../../shopify.server";
 import { Timer } from "../../models/Timer";
-
-function validateTimerData(data: any) {
-  const errors: any = {};
-  if (!data.name) errors.name = "Timer name is required";
-  if (!data.type) errors.type = "Type is required";
-  if (data.type === "fixed" && !data.endAt)
-    errors.endAt = "End date is required for fixed timers";
-  return errors;
-}
+import { validateTimerData } from "../../../utils/validation";
+import { connectDB } from "../../db.server";
 
 export async function getTimers(shop: string) {
-  return await Timer.find({ shop }).sort({ createdAt: -1 });
+  await connectDB();
+  const timers = await Timer.find({ shop }).sort({ createdAt: -1 }).lean();
+  console.log(`[DB] getTimers for shop: '${shop}' found ${timers.length} records.`);
+  return timers;
 }
 
 export async function createTimer(shop: string, data: any) {
+  await connectDB();
   const errors = validateTimerData(data);
   if (Object.keys(errors).length > 0) {
     throw { errors, status: 400 };
@@ -23,10 +20,12 @@ export async function createTimer(shop: string, data: any) {
 }
 
 export async function getTimer(shop: string, id: string) {
-  return await Timer.findOne({ _id: id, shop });
+  await connectDB();
+  return await Timer.findOne({ _id: id, shop }).lean();
 }
 
 export async function updateTimer(shop: string, id: string, data: any) {
+  await connectDB();
   return await Timer.findOneAndUpdate(
     { _id: id, shop },
     { $set: data },
@@ -35,11 +34,13 @@ export async function updateTimer(shop: string, id: string, data: any) {
 }
 
 export async function deleteTimer(shop: string, id: string) {
+  await connectDB();
   return await Timer.deleteOne({ _id: id, shop });
 }
 
 export async function timersLoader({ request }: { request: Request }) {
   const { session } = await authenticate.admin(request);
+
   const timers = await getTimers(session.shop);
   return Response.json({ timers });
 }
@@ -112,3 +113,5 @@ export async function timerIdAction({
     return Response.json({ message: "Server error" }, { status: 500 });
   }
 }
+
+

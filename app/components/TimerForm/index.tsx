@@ -11,10 +11,11 @@ import {
   Popover,
   DatePicker,
 } from "@shopify/polaris";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSubmit, useNavigation } from "react-router";
 import { TargetingPicker, type Resource } from "./TargetingPicker";
 import { StyleControls } from "./StyleControls";
+import { DURATION_OPTIONS } from "../../constants/timer";
 
 import { Timer } from "../../types/timer";
 
@@ -57,6 +58,9 @@ export function TimerForm({ timer }: TimerFormProps) {
   const [description, setDescription] = useState<string>(
     timer?.description || "",
   );
+  const [durationMinutes, setDurationMinutes] = useState<string>(
+    String(timer?.durationMinutes || "60"),
+  );
   const [targetingType, setTargetingType] = useState<
     "all" | "product" | "collection"
   >(timer?.targeting?.type || "all");
@@ -69,7 +73,7 @@ export function TimerForm({ timer }: TimerFormProps) {
     timer?.styleConfig?.size || "medium",
   );
   const [position, setPosition] = useState<"top" | "bottom" | "static">(
-    timer?.styleConfig?.position || "top",
+    timer?.styleConfig?.position || "static",
   );
   const [urgency, setUrgency] = useState<"none" | "pulse">(
     timer?.styleConfig?.urgency || "none",
@@ -94,7 +98,7 @@ export function TimerForm({ timer }: TimerFormProps) {
     }
   }, [timer]);
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     const payload = {
       name,
       type,
@@ -116,11 +120,43 @@ export function TimerForm({ timer }: TimerFormProps) {
             ? selectedResources.map((r) => r.id)
             : [],
       },
-      durationMinutes: type === "evergreen" ? 60 : undefined,
+      durationMinutes:
+        type === "evergreen" ? parseInt(durationMinutes) : undefined,
     };
 
     submit({ data: JSON.stringify(payload) }, { method: "POST" });
-  };
+  }, [
+    name,
+    type,
+    startDate,
+    endDate,
+    description,
+    color,
+    size,
+    position,
+    urgency,
+    targetingType,
+    durationMinutes,
+    selectedResources,
+    submit,
+  ]);
+
+  const handleSizeChange = useCallback(
+    (v: string) => setSize(v as "small" | "medium" | "large"),
+    [],
+  );
+  const handlePositionChange = useCallback(
+    (v: string) => setPosition(v as "top" | "bottom" | "static"),
+    [],
+  );
+  const handleUrgencyChange = useCallback(
+    (v: string) => setUrgency(v as "none" | "pulse"),
+    [],
+  );
+  const handleTargetingTypeChange = useCallback(
+    (v: string) => setTargetingType(v as "all" | "product" | "collection"),
+    [],
+  );
 
   const formatDate = (date: Date) => date.toLocaleDateString();
 
@@ -129,7 +165,7 @@ export function TimerForm({ timer }: TimerFormProps) {
       title={timer ? "Edit Timer" : "Create New Timer"}
       backAction={{
         content: "Timers",
-        onAction: () => navigate("/app/timers"),
+        onAction: () => navigate("/app"),
       }}
       primaryAction={{
         content: "Save",
@@ -223,6 +259,15 @@ export function TimerForm({ timer }: TimerFormProps) {
                   </FormLayout.Group>
                 )}
 
+                {type === "evergreen" && (
+                  <Select
+                    label="Duration"
+                    options={DURATION_OPTIONS}
+                    value={durationMinutes}
+                    onChange={setDurationMinutes}
+                  />
+                )}
+
                 <TextField
                   label="Promotion description"
                   value={description}
@@ -238,18 +283,16 @@ export function TimerForm({ timer }: TimerFormProps) {
               color={color}
               setColor={setColor}
               size={size}
-              setSize={(v) => setSize(v as "small" | "medium" | "large")}
+              setSize={handleSizeChange}
               position={position}
-              setPosition={(v) => setPosition(v as "top" | "bottom" | "static")}
+              setPosition={handlePositionChange}
               urgency={urgency}
-              setUrgency={(v) => setUrgency(v as "none" | "pulse")}
+              setUrgency={handleUrgencyChange}
             />
 
             <TargetingPicker
               targetingType={targetingType}
-              setTargetingType={(v) =>
-                setTargetingType(v as "all" | "product" | "collection")
-              }
+              setTargetingType={handleTargetingTypeChange}
               selectedResources={selectedResources}
               setSelectedResources={setSelectedResources}
             />
