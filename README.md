@@ -1,236 +1,220 @@
-# Shopify App Template - React Router
 
-This is a template for building a [Shopify app](https://shopify.dev/docs/apps/getting-started) using [React Router](https://reactrouter.com/). It was forked from the [Shopify Remix app template](https://github.com/Shopify/shopify-app-template-remix) and converted to React Router.
+Shopify Countdown Timer App
 
-Rather than cloning this repo, follow the [Quick Start steps](https://github.com/Shopify/shopify-app-template-react-router#quick-start).
+A customizable countdown timer app for Shopify stores, built using the React Router (Remix) template.
+This app helps merchants create urgency on their storefront by displaying countdown timers for sales, launches, or limited-time offers.
 
-Visit the [`shopify.dev` documentation](https://shopify.dev/docs/api/shopify-app-react-router) for more details on the React Router app package.
+📌 Project Overview
 
-## Upgrading from Remix
+This application allows Shopify merchants to configure and display countdown timers across their store.
 
-If you have an existing Remix app that you want to upgrade to React Router, please follow the [upgrade guide](https://github.com/Shopify/shopify-app-template-react-router/wiki/Upgrading-from-Remix). Otherwise, please follow the quick start guide below.
+What the app supports
 
-## Quick start
+Multiple timer types
 
-### Prerequisites
+Fixed timers for specific events (e.g. Black Friday, flash sales)
 
-Before you begin, you'll need to [download and install the Shopify CLI](https://shopify.dev/docs/apps/tools/cli/getting-started) if you haven't already.
+Evergreen timers that reset per user session
 
-### Setup
+Flexible targeting
 
-```shell
-shopify app init --template=https://github.com/Shopify/shopify-app-template-react-router
-```
+Show timers on all pages
 
-### Local Development
+Limit them to specific products or collections
 
-```shell
-shopify app dev
-```
+Design customization
 
-Press P to open the URL to your app. Once you click install, you can start development.
+Top bar, bottom bar, or static placement
 
-Local development is powered by [the Shopify CLI](https://shopify.dev/docs/apps/tools/cli). It logs into your account, connects to an app, provides environment variables, updates remote config, creates a tunnel and provides commands to generate extensions.
+Configurable colors and sizes from the Admin UI
 
-### Authenticating and querying data
+Performance-focused
 
-To authenticate and query data you can use the `shopify` const that is exported from `/app/shopify.server.js`:
+Minimal logic in the theme extension
 
-```js
-export async function loader({ request }) {
-  const { admin } = await shopify.authenticate.admin(request);
+Optimized server-side queries for storefront rendering
 
-  const response = await admin.graphql(`
-    {
-      products(first: 25) {
-        nodes {
-          title
-          description
-        }
-      }
-    }`);
+🛠 Prerequisites
 
-  const {
-    data: {
-      products: { nodes },
-    },
-  } = await response.json();
+Before running the project, make sure you have the following:
 
-  return nodes;
-}
-```
+Shopify Partner Account
 
-This template comes pre-configured with examples of:
+Required to create a development store and install custom apps
 
-1. Setting up your Shopify app in [/app/shopify.server.ts](https://github.com/Shopify/shopify-app-template-react-router/blob/main/app/shopify.server.ts)
-2. Querying data using Graphql. Please see: [/app/routes/app.\_index.tsx](https://github.com/Shopify/shopify-app-template-react-router/blob/main/app/routes/app._index.tsx).
-3. Responding to webhooks. Please see [/app/routes/webhooks.tsx](https://github.com/Shopify/shopify-app-template-react-router/blob/main/app/routes/webhooks.app.uninstalled.tsx).
+Node.js
 
-Please read the [documentation for @shopify/shopify-app-react-router](https://shopify.dev/docs/api/shopify-app-react-router) to see what other API's are available.
+Version 18+
 
-## Shopify Dev MCP
+MongoDB
 
-This template is configured with the Shopify Dev MCP. This instructs [Cursor](https://cursor.com/), [GitHub Copilot](https://github.com/features/copilot) and [Claude Code](https://claude.com/product/claude-code) and [Google Gemini CLI](https://github.com/google-gemini/gemini-cli) to use the Shopify Dev MCP.
+Local instance or MongoDB Atlas
 
-For more information on the Shopify Dev MCP please read [the documentation](https://shopify.dev/docs/apps/build/devmcp).
+Shopify CLI
 
-## Deployment
+Installed globally or used via npx
 
-### Application Storage
+⚙️ Project Setup
 
-This template uses [Prisma](https://www.prisma.io/) to store session data, by default using an [SQLite](https://www.sqlite.org/index.html) database.
-The database is defined as a Prisma schema in `prisma/schema.prisma`.
+The project is already initialized, but this section explains how it was originally set up.
 
-This use of SQLite works in production if your app runs as a single instance.
-The database that works best for you depends on the data your app needs and how it is queried.
-Here’s a short list of databases providers that provide a free tier to get started:
+# Authenticate with Shopify
+shopify auth login
 
-| Database   | Type             | Hosters                                                                                                                                                                                                                                    |
-| ---------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| MySQL      | SQL              | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-mysql), [Planet Scale](https://planetscale.com/), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/mysql) |
-| PostgreSQL | SQL              | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-postgresql), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/postgres)                                   |
-| Redis      | Key-value        | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-redis), [Amazon MemoryDB](https://aws.amazon.com/memorydb/)                                                                                                        |
-| MongoDB    | NoSQL / Document | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-mongodb), [MongoDB Atlas](https://www.mongodb.com/atlas/database)                                                                                                  |
+# Initialize the app using the Remix / React Router template
+shopify app init --template=remix
 
-To use one of these, you can use a different [datasource provider](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#datasource) in your `schema.prisma` file, or a different [SessionStorage adapter package](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/guides/session-storage.md).
+📦 Installation & Running the App
+1. Install dependencies
+npm install
 
-### Build
+2. Environment configuration
 
-Build the app by running the command below with the package manager of your choice:
+Create a .env file in the project root:
 
-Using yarn:
+SHOPIFY_API_KEY=your_api_key
+SHOPIFY_API_SECRET=your_api_secret
+SCOPES=write_products,write_content,write_themes
+HOST=your_tunnel_url
+MONGODB_URI=mongodb://localhost:27017/shopify-countdown
 
-```shell
-yarn build
-```
 
-Using npm:
+Most Shopify credentials are automatically populated when running the app with the Shopify CLI.
 
-```shell
-npm run build
-```
+3. Start development server
+npm run dev
 
-Using pnpm:
 
-```shell
-pnpm run build
-```
+This will:
 
-## Hosting
+Start the Remix server
 
-When you're ready to set up your app in production, you can follow [our deployment documentation](https://shopify.dev/docs/apps/launch/deployment) to host it externally. From there, you have a few options:
+Create a Cloudflare tunnel
 
-- [Google Cloud Run](https://shopify.dev/docs/apps/launch/deployment/deploy-to-google-cloud-run): This tutorial is written specifically for this example repo, and is compatible with the extended steps included in the subsequent [**Build your app**](tutorial) in the **Getting started** docs. It is the most detailed tutorial for taking a React Router-based Shopify app and deploying it to production. It includes configuring permissions and secrets, setting up a production database, and even hosting your apps behind a load balancer across multiple regions.
-- [Fly.io](https://fly.io/docs/js/shopify/): Leverages the Fly.io CLI to quickly launch Shopify apps to a single machine.
-- [Render](https://render.com/docs/deploy-shopify-app): This tutorial guides you through using Docker to deploy and install apps on a Dev store.
-- [Manual deployment guide](https://shopify.dev/docs/apps/launch/deployment/deploy-to-hosting-service): This resource provides general guidance on the requirements of deployment including environment variables, secrets, and persistent data.
+Prompt you to install the app on your development store
 
-When you reach the step for [setting up environment variables](https://shopify.dev/docs/apps/deployment/web#set-env-vars), you also need to set the variable `NODE_ENV=production`.
+Press p in the terminal to open the preview URL.
 
-## Gotchas / Troubleshooting
+4. Run tests
+npm run test
 
-### Database tables don't exist
+🗄 Database Design (MongoDB)
 
-If you get an error like:
+The app uses MongoDB with Mongoose.
+The main collection is the Timer model.
 
-```
-The table `main.Session` does not exist in the current database.
-```
+Timer Schema
+Field	Description
+_id	MongoDB ObjectId
+shop	Store’s myshopify.com domain (indexed)
+name	Internal timer name
+type	fixed or evergreen
+startAt	Start date (fixed timers)
+endAt	End date (fixed timers)
+durationMinutes	Duration for evergreen timers
+styleConfig	Position, color, and size settings
+targeting	Page targeting rules (all / product / collection)
+status	active, scheduled, or expired (indexed)
+Indexes
 
-Create the database for Prisma. Run the `setup` script in `package.json` using `npm`, `yarn` or `pnpm`.
+{ shop: 1, "targeting.type": 1 }
+→ Optimizes storefront timer lookups
 
-### Navigating/redirecting breaks an embedded app
+{ shop: 1, status: 1 }
+→ Improves admin dashboard filtering
 
-Embedded apps must maintain the user session, which can be tricky inside an iFrame. To avoid issues:
+🧩 Theme App Extension
 
-1. Use `Link` from `react-router` or `@shopify/polaris`. Do not use `<a>`.
-2. Use `redirect` returned from `authenticate.admin`. Do not use `redirect` from `react-router`
-3. Use `useSubmit` from `react-router`.
+Timers are rendered on the storefront using a Shopify Theme App Extension.
 
-This only applies if your app is embedded, which it will be by default.
+Location
 
-### Webhooks: shop-specific webhook subscriptions aren't updated
+extensions/countdown-theme-ext/
 
-If you are registering webhooks in the `afterAuth` hook, using `shopify.registerWebhooks`, you may find that your subscriptions aren't being updated.
 
-Instead of using the `afterAuth` hook declare app-specific webhooks in the `shopify.app.toml` file. This approach is easier since Shopify will automatically sync changes every time you run `deploy` (e.g: `npm run deploy`). Please read these guides to understand more:
+Key files
 
-1. [app-specific vs shop-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions)
-2. [Create a subscription tutorial](https://shopify.dev/docs/apps/build/webhooks/subscribe/get-started?deliveryMethod=https)
+blocks/timer.liquid – Liquid markup for rendering the timer
 
-If you do need shop-specific webhooks, keep in mind that the package calls `afterAuth` in 2 scenarios:
+assets/timer.js – Client-side countdown logic
 
-- After installing the app
-- When an access token expires
+shopify.extension.toml – Extension configuration
 
-During normal development, the app won't need to re-authenticate most of the time, so shop-specific subscriptions aren't updated. To force your app to update the subscriptions, uninstall and reinstall the app. Revisiting the app will call the `afterAuth` hook.
+How merchants use it
 
-### Webhooks: Admin created webhook failing HMAC validation
+Enable the Countdown Timer App Embed for global timers
 
-Webhooks subscriptions created in the [Shopify admin](https://help.shopify.com/en/manual/orders/notifications/webhooks) will fail HMAC validation. This is because the webhook payload is not signed with your app's secret key.
+Add the Countdown Section to specific pages via the Theme Editor
 
-The recommended solution is to use [app-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions) defined in your toml file instead. Test your webhooks by triggering events manually in the Shopify admin(e.g. Updating the product title to trigger a `PRODUCTS_UPDATE`).
+🏗 Architecture Choices
+Controller-Service pattern (no internal API calls)
 
-### Webhooks: Admin object undefined on webhook events triggered by the CLI
+Originally, calling internal API routes from Remix loaders caused issues such as:
 
-When you trigger a webhook event using the Shopify CLI, the `admin` object will be `undefined`. This is because the CLI triggers an event with a valid, but non-existent, shop. The `admin` object is only available when the webhook is triggered by a shop that has installed the app. This is expected.
+Authentication redirects
 
-Webhooks triggered by the CLI are intended for initial experimentation testing of your webhook configuration. For more information on how to test your webhooks, see the [Shopify CLI documentation](https://shopify.dev/docs/apps/tools/cli/commands#webhook-trigger).
+410 Gone errors
 
-### Incorrect GraphQL Hints
+Embedded app loopbacks
 
-By default the [graphql.vscode-graphql](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql) extension for will assume that GraphQL queries or mutations are for the [Shopify Admin API](https://shopify.dev/docs/api/admin). This is a sensible default, but it may not be true if:
+Current approach
 
-1. You use another Shopify API such as the storefront API.
-2. You use a third party GraphQL API.
+Remix loaders/actions directly import service functions:
 
-If so, please update [.graphqlrc.ts](https://github.com/Shopify/shopify-app-template-react-router/blob/main/.graphqlrc.ts).
+import { getTimers, createTimer } from "~/server/routes/admin/timers";
 
-### Using Defer & await for streaming responses
 
-By default the CLI uses a cloudflare tunnel. Unfortunately cloudflare tunnels wait for the Response stream to finish, then sends one chunk. This will not affect production.
+Why this works better
 
-To test [streaming using await](https://reactrouter.com/api/components/Await#await) during local development we recommend [localhost based development](https://shopify.dev/docs/apps/build/cli-for-apps/networking-options#localhost-based-development).
+No internal network requests
 
-### "nbf" claim timestamp check failed
+No auth loopback problems
 
-This is because a JWT token is expired. If you are consistently getting this error, it could be that the clock on your machine is not in sync with the server. To fix this ensure you have enabled "Set time and date automatically" in the "Date and Time" settings on your computer.
+Cleaner error handling
 
-### Using MongoDB and Prisma
+Better performance
 
-If you choose to use MongoDB with Prisma, there are some gotchas in Prisma's MongoDB support to be aware of. Please see the [Prisma SessionStorage README](https://www.npmjs.com/package/@shopify/shopify-app-session-storage-prisma#mongodb).
+Using .lean() with Mongoose
 
-### Unable to require(`C:\...\query_engine-windows.dll.node`).
+All read queries use .lean():
 
-Unable to require(`C:\...\query_engine-windows.dll.node`).
-The Prisma engines do not seem to be compatible with your system.
+const timers = await Timer.find({ shop }).lean();
 
-query_engine-windows.dll.node is not a valid Win32 application.
 
-**Fix:** Set the environment variable:
+Benefits
 
-```shell
-PRISMA_CLIENT_ENGINE_TYPE=binary
-```
+Returns plain JavaScript objects
 
-This forces Prisma to use the binary engine mode, which runs the query engine as a separate process and can work via emulation on Windows ARM64.
+Avoids Remix serialization issues
 
-## Resources
+Faster and memory-efficient
 
-React Router:
+Cleaner data passed to the client
 
-- [React Router docs](https://reactrouter.com/home)
+📝 Assumptions & Limitations
 
-Shopify:
+MongoDB is required
 
-- [Intro to Shopify apps](https://shopify.dev/docs/apps/getting-started)
-- [Shopify App React Router docs](https://shopify.dev/docs/api/shopify-app-react-router)
-- [Shopify CLI](https://shopify.dev/docs/apps/tools/cli)
-- [Shopify App Bridge](https://shopify.dev/docs/api/app-bridge-library).
-- [Polaris Web Components](https://shopify.dev/docs/api/app-home/polaris-web-components).
-- [App extensions](https://shopify.dev/docs/apps/app-extensions/list)
-- [Shopify Functions](https://shopify.dev/docs/api/functions)
+The app will not start without a valid database connection
 
-Internationalization:
+Required Shopify scopes
 
-- [Internationalizing your app](https://shopify.dev/docs/apps/best-practices/internationalization/getting-started)
+write_content and write_themes are mandatory
+
+Single-region deployment
+
+No replication or edge caching implemented yet
+
+Would need changes for large-scale/global usage
+
+✅ Summary
+
+This project focuses on:
+
+Clean separation between admin logic and storefront rendering
+
+Avoiding common embedded-app pitfalls
+
+Keeping the theme extension lightweight and fast
+
+Making the app easy to extend with additional timer features
