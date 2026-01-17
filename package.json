@@ -15,6 +15,7 @@
     "shopify": "shopify",
     "graphql-codegen": "graphql-codegen",
     "vite": "vite",
+    "test": "vitest",
     "typecheck": "react-router typegen && tsc --noEmit"
   },
   "type": "module",
