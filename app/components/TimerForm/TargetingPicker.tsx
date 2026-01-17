@@ -12,6 +12,7 @@ import {
   Text,
   Box,
 } from "@shopify/polaris";
+import { useAppBridge } from "@shopify/app-bridge-react";
 import { useCallback } from "react";
 
 interface TargetingPickerProps {
@@ -33,11 +34,10 @@ export function TargetingPicker({
   selectedResources,
   setSelectedResources,
 }: TargetingPickerProps) {
+  const shopify = useAppBridge();
+
   const handleBrowse = useCallback(async () => {
     const type = targetingType === "product" ? "product" : "collection";
-    const shopify = (window as any).shopify;
-
-    if (!shopify?.resourcePicker) return;
 
     try {
       const selected = await shopify.resourcePicker({
@@ -58,7 +58,7 @@ export function TargetingPicker({
     } catch (error) {
       console.log("Picker cancelled", error);
     }
-  }, [targetingType, selectedResources, setSelectedResources]);
+  }, [targetingType, selectedResources, setSelectedResources, shopify]);
 
   const handleTargetTypeChange = useCallback(
     (val: string) => {

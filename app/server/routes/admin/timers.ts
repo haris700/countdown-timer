@@ -26,6 +26,10 @@ export async function getTimer(shop: string, id: string) {
 
 export async function updateTimer(shop: string, id: string, data: any) {
   await connectDB();
+  const errors = validateTimerData(data);
+  if (Object.keys(errors).length > 0) {
+    throw { errors, status: 400 };
+  }
   return await Timer.findOneAndUpdate(
     { _id: id, shop },
     { $set: data },

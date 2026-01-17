@@ -154,8 +154,14 @@ export function TimerForm({ timer }: TimerFormProps) {
     [],
   );
   const handleTargetingTypeChange = useCallback(
-    (v: string) => setTargetingType(v as "all" | "product" | "collection"),
-    [],
+    (v: string) => {
+      const newType = v as "all" | "product" | "collection";
+      if (newType !== targetingType) {
+        setSelectedResources([]);
+      }
+      setTargetingType(newType);
+    },
+    [targetingType],
   );
 
   const formatDate = (date: Date) => date.toLocaleDateString();
